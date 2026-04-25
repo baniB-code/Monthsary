@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 type FloatingMusicPlayerProps = {
   title: string;
@@ -13,7 +13,6 @@ export function FloatingMusicPlayer({
   artist,
   audioUrl,
 }: FloatingMusicPlayerProps) {
-  const [isOpen, setIsOpen] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -46,30 +45,36 @@ export function FloatingMusicPlayer({
   }, [audioUrl]);
 
   return (
-    <div className="fixed right-4 bottom-4 z-50 w-[min(92vw,360px)]">
-      <div className="overflow-hidden rounded-2xl border border-rose-200 bg-white/90 shadow-xl backdrop-blur-md">
-        <button
-          type="button"
-          onClick={() => setIsOpen((prev) => !prev)}
-          className="flex w-full items-center justify-between px-4 py-3 text-left"
-        >
-          <span className="font-semibold text-rose-700">Music for Us</span>
-          <span className="text-rose-500">{isOpen ? "Hide" : "Show"}</span>
-        </button>
-
-        {isOpen ? (
-          <div className="space-y-3 border-t border-rose-100 px-4 py-4">
-            <div>
-              <p className="font-medium text-rose-900">{title}</p>
-              <p className="text-sm text-rose-500">{artist}</p>
-            </div>
-            <audio ref={audioRef} controls autoPlay loop className="w-full">
-              <source src={audioUrl} type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
+    <section className="music-player-section stitched relative mx-auto mb-12 overflow-hidden rounded-[2rem] p-6 sm:p-9">
+      <span className="floating-note floating-note-soft left-5 top-5 rotate-[-8deg]">our song</span>
+      <span className="floating-note floating-note-soft right-5 top-5 rotate-[9deg]">play me</span>
+      <div className="music-player-glow" />
+      <div className="relative z-10 grid items-center gap-6 md:grid-cols-[1.2fr_1fr]">
+        <div>
+          <p className="inline-flex items-center rounded-full border border-rose-200/80 bg-white/85 px-3 py-1 text-xs font-semibold tracking-[0.2em] uppercase text-rose-500">
+            Our Soundtrack
+          </p>
+          <div className="music-decorative-icons mt-4" aria-hidden="true">
+            <span>♪</span>
+            <span>♡</span>
+            <span>♫</span>
+            <span>✿</span>
           </div>
-        ) : null}
+          <h2 className="mt-4 text-2xl font-bold text-rose-950 sm:text-3xl">theme song natin</h2>
+          <p className="mt-2 text-rose-700/90">
+            "Kalapastangan ang 'di ka ibigin, Kalokohan ang 'di ka isipin."
+          </p>
+        </div>
+        <div className="music-player-card rounded-[1.4rem] p-5 sm:p-6">
+          <p className="text-sm font-medium text-rose-500">Current song</p>
+          <p className="mt-1 text-lg font-semibold text-rose-900">{title}</p>
+          <p className="text-sm text-rose-600">{artist}</p>
+          <audio ref={audioRef} controls autoPlay loop className="mt-4 w-full">
+            <source src={audioUrl} type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

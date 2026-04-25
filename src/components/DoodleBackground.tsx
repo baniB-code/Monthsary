@@ -1,8 +1,52 @@
 "use client";
 
-export default function DoodleBackground() {
+type DoodleBackgroundProps = {
+  imageUrls: string[];
+};
+
+export default function DoodleBackground({ imageUrls = [] }: DoodleBackgroundProps) {
+  const tileVariants = [
+    "photo-bg-tile-sm",
+    "photo-bg-tile-md",
+    "photo-bg-tile-lg",
+    "photo-bg-tile-tall",
+    "photo-bg-tile-wide",
+    "photo-bg-tile-portrait",
+    "photo-bg-tile-square",
+    "photo-bg-tile-long",
+  ];
+  const baseImages = imageUrls.slice(0, 24);
+  const collageImages =
+    baseImages.length > 0
+      ? Array.from({ length: 520 }, (_, index) => baseImages[index % baseImages.length])
+      : [];
+
+  const getDriftClass = (index: number) => {
+    if (index % 7 === 0) return "photo-bg-drift-a";
+    if (index % 9 === 0) return "photo-bg-drift-b";
+    if (index % 11 === 0) return "photo-bg-drift-c";
+    return "";
+  };
+
   return (
-    <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+    <div className="pointer-events-none absolute inset-x-0 -top-[2%] -bottom-[35%] z-0 overflow-hidden">
+      {collageImages.length > 0 ? (
+        <>
+          <div className="photo-bg-grid">
+            {collageImages.map((imageUrl, index) => (
+              <figure
+                key={`${imageUrl}-bg-${index}`}
+                className={`photo-bg-tile ${tileVariants[index % tileVariants.length]} ${getDriftClass(index)}`}
+              >
+                <img src={imageUrl} alt="" loading="lazy" className="h-full w-full object-cover" />
+              </figure>
+            ))}
+          </div>
+          <div className="photo-bg-overlay" />
+          <div className="photo-bg-vignette" />
+        </>
+      ) : null}
+
       {/* soft blur blobs */}
       <div className="absolute top-[-100px] left-[-80px] h-80 w-80 rounded-full bg-[#d6c2a1]/40 blur-3xl animate-pulse" />
       <div className="absolute right-[-80px] bottom-[-100px] h-96 w-96 rounded-full bg-[#cfa18d]/30 blur-3xl animate-pulse" />

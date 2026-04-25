@@ -2,6 +2,7 @@ import { fetchMemories } from "../../lib/supabase";
 import { readdir } from "node:fs/promises";
 import path from "node:path";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { AddPhotosGallery } from "@/components/AddPhotosGallery";
 import DoodleBackground from "@/components/DoodleBackground";
 import { EnvelopeLetter } from "@/components/EnvelopeLetter";
 import { FloatingMusicPlayer } from "@/components/FloatingMusicPlayer";
@@ -12,6 +13,7 @@ import { fallbackMemories, siteContent } from "@/lib/site-content";
 export default async function Home() {
   let memories = fallbackMemories;
   let collageImages: string[] = [];
+  let telegramBgImages: string[] = [];
 
   try {
     const fetchedMemories = await fetchMemories();
@@ -34,18 +36,56 @@ export default async function Home() {
     // If collage folder is missing, fallback to memory images.
   }
 
+  try {
+    const telegramBgDir = path.join(process.cwd(), "public", "telegram-bg");
+    const allowedExt = new Set([".jpg", ".jpeg", ".png", ".webp"]);
+    const files = await readdir(telegramBgDir);
+    const uniqueMomentFiles = new Map<string, string>();
+    const sortedFiles = files
+      .filter((file) => allowedExt.has(path.extname(file).toLowerCase()))
+      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+
+    for (const file of sortedFiles) {
+      // Telegram exports many similar shots with different photo_X prefixes.
+      const momentKey = file.replace(/^photo_\d+_/, "");
+      if (!uniqueMomentFiles.has(momentKey)) {
+        uniqueMomentFiles.set(momentKey, file);
+      }
+    }
+
+    telegramBgImages = Array.from(uniqueMomentFiles.values()).map(
+      (file) => `/telegram-bg/${file}`,
+    );
+  } catch {
+    // If telegram-bg folder is missing, keep decorative background fallback.
+  }
+
   const heroPhotoPool = collageImages.length > 0 ? collageImages : memories.map((memory) => memory.image_url);
   const heroPhotos = [...heroPhotoPool.slice(2), ...heroPhotoPool.slice(0, 2)].slice(0, 6);
 
   return (
-    <div className="romantic-page relative overflow-hidden text-rose-950">
-      <div className="pointer-events-none absolute inset-0 romantic-bg opacity-70" />
-      <DoodleBackground />
+    <div className="romantic-page relative min-h-screen overflow-hidden text-rose-950">
+      <div className="pointer-events-none absolute inset-x-0 -top-[2%] -bottom-[35%] romantic-bg opacity-70" />
+      <DoodleBackground imageUrls={telegramBgImages} />
 
       <main className="relative z-10 mx-auto max-w-6xl px-5 pb-28 sm:px-8">
-        <AnimatedSection className="relative min-h-[92vh] content-center py-20 text-center sm:py-24">
+        <AnimatedSection className="section-block pt-12 sm:pt-16">
+          <FloatingMusicPlayer
+            title={siteContent.music.title}
+            artist={siteContent.music.artist}
+            audioUrl={siteContent.music.url}
+          />
+        </AnimatedSection>
+        <div className="section-divider" aria-hidden="true">
+          <span>♡</span>
+          <span>✿</span>
+          <span>♡</span>
+        </div>
+
+        <AnimatedSection className="section-block relative min-h-[92vh] content-center text-center">
           <div className="hero-glow" />
-          <div className="romantic-panel stitched relative mx-auto mb-8 w-full rounded-[2rem] px-4 pt-10 pb-8 sm:px-8">
+          <div className="relative left-1/2 right-1/2 mb-8 w-screen -translate-x-1/2 px-3 sm:px-6 lg:px-10">
+          <div className="romantic-panel stitched relative mx-auto w-full rounded-[2.2rem] px-5 pt-12 pb-10 sm:px-10">
             <div className="absolute top-6 left-4 h-16 w-16 rotate-[-10deg] rounded-sm border border-amber-200/80 bg-amber-50/85 p-2 text-left text-[10px] leading-snug text-amber-900 shadow-sm sm:left-10 sm:h-20 sm:w-20 sm:text-xs">
               Kahit malayo, ikaw pa rin palagi.
             </div>
@@ -86,75 +126,102 @@ export default async function Home() {
               </div>
             </div>
           </div>
+          </div>
         </AnimatedSection>
+        <div className="section-divider" aria-hidden="true">
+          <span>❥</span>
+          <span>✿</span>
+          <span>❥</span>
+        </div>
 
-        <AnimatedSection className="py-14">
-          <SectionTitle
-            eyebrow="Our Collage"
-            title="Our Pictures Together"
-            subtitle="(for relapse purposes)"
-          />
+        <AnimatedSection className="section-block">
+          <div className="relative">
+            <span className="floating-note floating-note-soft left-[6%] top-2 rotate-[-7deg]">
+              more us pics
+            </span>
+            <span className="floating-note floating-note-soft right-[8%] top-4 rotate-[8deg]">
+              cute dump
+            </span>
+            <SectionTitle
+              eyebrow="Our Collage"
+              title="Our Online Album"
+              subtitle="upload mo dito mga pictures natin mahal, for relapse purposes"
+              asCard
+            />
+          </div>
+          <div className="relative left-1/2 right-1/2 w-screen -translate-x-1/2 px-3 sm:px-6 lg:px-10">
+            <AddPhotosGallery initialImages={collageImages.length > 0 ? collageImages : memories.map((memory) => memory.image_url)} />
+          </div>
+        </AnimatedSection>
+        <div className="section-divider" aria-hidden="true">
+          <span>♡</span>
+          <span>✿</span>
+          <span>♡</span>
+        </div>
 
-          <div className="romantic-panel stitched relative mx-auto rounded-[1.7rem] p-5 sm:p-7">
-            <div className="floral-corner top-left" />
-            <div className="floral-corner bottom-right" />
-            <div className="mx-auto columns-2 gap-4 space-y-4 sm:columns-3 lg:columns-4">
-            {(collageImages.length > 0 ? collageImages : memories.map((memory) => memory.image_url)).map(
-              (imageUrl, index) => (
-                <figure
-                  key={`${imageUrl}-${index}`}
-                  className="polaroid washi-tape break-inside-avoid overflow-hidden rounded-2xl"
-                >
-                  <img
-                    src={imageUrl}
-                    alt={`Collage photo ${index + 1}`}
-                    className="w-full object-cover transition duration-500 hover:scale-105"
-                  />
-                </figure>
-              ),
-            )}
+        <AnimatedSection className="section-block">
+          <div className="love-phrase-wrap relative mx-auto max-w-5xl">
+            <span className="floating-note left-[-4%] top-[22%] rotate-[-11deg]">forever</span>
+            <span className="floating-note right-[-2%] top-[30%] rotate-[10deg]">my home</span>
+            <div className="love-phrase-glow" />
+            <span className="love-float-heart love-heart-1">❤</span>
+            <span className="love-float-heart love-heart-2">♡</span>
+            <span className="love-float-heart love-heart-3">❤</span>
+            <span className="love-float-heart love-heart-4">♡</span>
+            <div className="love-phrase-grid mx-auto grid max-w-5xl grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-6">
+            {["EVANN", "❤", "ALYSON"].map((word, index) => (
+              <article
+                key={word}
+                className="paper-note luxury-card love-word-card relative rounded-[1.4rem] p-10 text-center sm:p-11"
+                style={{ transform: `rotate(${[-3, 1, 3][index]}deg)` }}
+              >
+                <span className="love-card-pin" />
+                <p className="love-word text-2xl font-semibold tracking-wide text-rose-700">{word}</p>
+                <span className="love-card-sparkle">✦</span>
+              </article>
+            ))}
             </div>
           </div>
         </AnimatedSection>
+        <div className="section-divider" aria-hidden="true">
+          <span>❥</span>
+          <span>✿</span>
+          <span>❥</span>
+        </div>
 
-        <AnimatedSection className="py-14">
-          <div className="mx-auto grid max-w-4xl grid-cols-2 gap-4 sm:grid-cols-4">
-            {["I", "LOVE", "YOU,", "SON"].map((word) => (
-              <article
-                key={word}
-                className="paper-note relative rounded-2xl p-8 text-center"
-              >
-                <p className="text-2xl font-semibold tracking-wide text-rose-700">{word}</p>
-              </article>
-            ))}
-          </div>
-        </AnimatedSection>
-
-        <AnimatedSection className="py-14">
+        <AnimatedSection className="section-block">
           <SectionTitle eyebrow="Love Letter" title={siteContent.loveLetter.title} />
-          <div className="romantic-panel mx-auto rounded-[1.7rem] p-3 sm:p-4">
+          <div className="romantic-panel relative mx-auto rounded-[1.9rem] p-4 sm:p-6">
+            <span className="floating-note floating-note-soft left-6 top-5 rotate-[-8deg]">
+              write me
+            </span>
+            <span className="floating-note floating-note-soft right-6 top-5 rotate-[8deg]">
+              keep this
+            </span>
             <EnvelopeLetter title={siteContent.loveLetter.title} body={siteContent.loveLetter.body} />
           </div>
         </AnimatedSection>
+        <div className="section-divider" aria-hidden="true">
+          <span>♡</span>
+          <span>✿</span>
+          <span>♡</span>
+        </div>
 
-        <AnimatedSection className="py-14">
+        <AnimatedSection className="section-block">
           <SectionTitle
             eyebrow="Countdown"
             title="Our Next Cuddle Time"
             subtitle="get ready!!!!!"
           />
-          <div className="romantic-panel stitched mx-auto max-w-3xl rounded-3xl p-6">
+          <div className="romantic-panel stitched relative mx-auto max-w-4xl rounded-[2rem] p-7 sm:p-9">
+            <span className="floating-note left-6 top-4 rotate-[-8deg]">soon</span>
+            <span className="floating-note right-6 top-4 rotate-[7deg]">can't wait</span>
             <RelationshipCounter targetDate="2026-05-19T00:00:00+08:00" />
           </div>
         </AnimatedSection>
 
       </main>
 
-      <FloatingMusicPlayer
-        title={siteContent.music.title}
-        artist={siteContent.music.artist}
-        audioUrl={siteContent.music.url}
-      />
     </div>
   );
 }

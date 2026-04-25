@@ -43,7 +43,7 @@ export function RelationshipCounter({ targetDate }: RelationshipCounterProps) {
       {items.map((item) => (
         <div
           key={item.label}
-          className="rounded-2xl border border-rose-200 bg-white/80 p-4 text-center shadow-sm backdrop-blur"
+          className="luxury-card rounded-[1.35rem] border border-rose-200/90 bg-white/84 p-5 text-center shadow-md backdrop-blur-sm sm:p-6"
         >
           <p className="text-3xl font-bold text-rose-700">{item.value}</p>
           <p className="text-sm tracking-wide text-rose-500">{item.label}</p>

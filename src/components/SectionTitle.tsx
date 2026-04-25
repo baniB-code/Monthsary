@@ -2,13 +2,16 @@ type SectionTitleProps = {
   eyebrow?: string;
   title: string;
   subtitle?: string;
+  asCard?: boolean;
 };
 
-export function SectionTitle({ eyebrow, title, subtitle }: SectionTitleProps) {
+export function SectionTitle({ eyebrow, title, subtitle, asCard = false }: SectionTitleProps) {
   return (
-    <div className="mx-auto mb-10 max-w-2xl text-center">
+    <div
+      className={`mx-auto mb-10 max-w-2xl text-center ${asCard ? "section-title-card luxury-card rounded-[1.7rem] px-6 py-6 sm:px-8 sm:py-7" : ""}`}
+    >
       {eyebrow ? (
-        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-rose-500">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-rose-600">
           {eyebrow}
         </p>
       ) : null}
