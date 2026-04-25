@@ -1,0 +1,410 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fff8fb;
+  --foreground: #4a1026;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #fff8fb;
+    --foreground: #4a1026;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out both;
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0) scale(1.03);
+  }
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.62;
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.18);
+  }
+}
+
+.romantic-page {
+  position: relative;
+  isolation: isolate;
+}
+
+.romantic-bg {
+  background:
+    radial-gradient(42rem 26rem at 12% 12%, rgba(161, 98, 7, 0.14), transparent 68%),
+    radial-gradient(28rem 18rem at 34% 24%, rgba(136, 84, 53, 0.14), transparent 72%),
+    radial-gradient(38rem 24rem at 88% 16%, rgba(190, 140, 100, 0.17), transparent 70%),
+    radial-gradient(30rem 18rem at 66% 34%, rgba(145, 95, 66, 0.12), transparent 72%),
+    radial-gradient(42rem 25rem at 20% 86%, rgba(244, 192, 154, 0.2), transparent 72%),
+    radial-gradient(48rem 28rem at 76% 74%, rgba(190, 24, 93, 0.11), transparent 72%),
+    radial-gradient(32rem 20rem at 52% 90%, rgba(151, 100, 63, 0.13), transparent 74%),
+    radial-gradient(36rem 22rem at 50% 48%, rgba(250, 237, 222, 0.8), transparent 80%),
+    linear-gradient(180deg, #fff8f2 0%, #fff5ee 48%, #fff4f7 100%);
+}
+
+.romantic-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(129, 67, 38, 0.08) 1px, transparent 0),
+    repeating-linear-gradient(
+      12deg,
+      rgba(122, 61, 34, 0.03) 0,
+      rgba(122, 61, 34, 0.03) 1px,
+      transparent 1px,
+      transparent 8px
+    );
+  background-size:
+    3px 3px,
+    auto;
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(52px);
+  opacity: 0.28;
+  animation: drift 16s ease-in-out infinite;
+}
+
+.blob-1 {
+  top: 4%;
+  left: -6%;
+  height: 26rem;
+  width: 26rem;
+  background: rgba(171, 118, 74, 0.62);
+}
+
+.blob-2 {
+  top: 30%;
+  right: -10%;
+  height: 24rem;
+  width: 24rem;
+  background: rgba(236, 190, 162, 0.6);
+  animation-delay: -4s;
+}
+
+.blob-3 {
+  bottom: 5%;
+  left: 22%;
+  height: 20rem;
+  width: 20rem;
+  background: rgba(197, 90, 112, 0.44);
+  animation-delay: -9s;
+}
+
+.blob-4 {
+  top: 52%;
+  left: -8%;
+  height: 22rem;
+  width: 22rem;
+  background: rgba(141, 92, 62, 0.5);
+  animation-delay: -7s;
+}
+
+.blob-5 {
+  top: 70%;
+  right: -6%;
+  height: 20rem;
+  width: 20rem;
+  background: rgba(169, 117, 82, 0.45);
+  animation-delay: -11s;
+}
+
+.romantic-doodles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.24;
+}
+
+.romantic-doodles::before,
+.romantic-doodles::after {
+  content: "";
+  position: absolute;
+  width: 12rem;
+  height: 12rem;
+  border: 2px dashed rgba(124, 76, 53, 0.32);
+  border-radius: 40% 60% 56% 44%;
+  animation: drift 18s ease-in-out infinite;
+}
+
+.romantic-doodles::before {
+  top: 8rem;
+  right: 7%;
+}
+
+.romantic-doodles::after {
+  bottom: 6rem;
+  left: 6%;
+  animation-delay: -6s;
+}
+
+.sparkle {
+  position: absolute;
+  color: rgba(171, 74, 101, 0.5);
+  font-size: 0.85rem;
+  animation: twinkle 5s ease-in-out infinite;
+}
+
+.sparkle.s1 {
+  top: 16%;
+  left: 10%;
+}
+.sparkle.s2 {
+  top: 22%;
+  right: 14%;
+  animation-delay: -1.4s;
+}
+.sparkle.s3 {
+  top: 42%;
+  left: 78%;
+  animation-delay: -2.8s;
+}
+.sparkle.s4 {
+  top: 69%;
+  left: 12%;
+  animation-delay: -3.5s;
+}
+.sparkle.s5 {
+  top: 80%;
+  right: 10%;
+  animation-delay: -4.2s;
+}
+
+.couple-doodle {
+  position: absolute;
+  color: rgba(130, 78, 56, 0.33);
+  font-family: "Comic Sans MS", "Bradley Hand", cursive;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  pointer-events: none;
+  animation: drift 20s ease-in-out infinite;
+}
+
+.couple-doodle.heart-arrow {
+  top: 10%;
+  left: 6%;
+  transform: rotate(-6deg);
+}
+
+.couple-doodle.kiss-note {
+  top: 18%;
+  right: 8%;
+  transform: rotate(8deg);
+  animation-delay: -4s;
+}
+
+.couple-doodle.pinky {
+  top: 38%;
+  right: 4%;
+  transform: rotate(-5deg);
+  animation-delay: -9s;
+}
+
+.couple-doodle.love-birds {
+  top: 57%;
+  left: 7%;
+  transform: rotate(4deg);
+  animation-delay: -6s;
+}
+
+.couple-doodle.infinity {
+  top: 72%;
+  right: 12%;
+  transform: rotate(-4deg);
+  animation-delay: -12s;
+}
+
+.couple-doodle.flower-line {
+  top: 84%;
+  left: 16%;
+  transform: rotate(2deg);
+  animation-delay: -2s;
+}
+
+.romantic-panel {
+  position: relative;
+  border: 1px solid rgba(196, 141, 113, 0.25);
+  background: linear-gradient(160deg, rgba(255, 249, 241, 0.88), rgba(255, 244, 248, 0.72));
+  backdrop-filter: blur(6px);
+  box-shadow:
+    0 18px 40px -24px rgba(121, 70, 41, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.romantic-panel::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 1px dashed rgba(161, 106, 74, 0.2);
+  border-radius: 1.25rem;
+  pointer-events: none;
+}
+
+.stitched {
+  position: relative;
+}
+
+.stitched::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px dashed rgba(160, 102, 67, 0.24);
+  border-radius: 1.35rem;
+  pointer-events: none;
+}
+
+.paper-note {
+  border: 1px solid rgba(190, 140, 100, 0.28);
+  background: linear-gradient(165deg, #fffaf2 0%, #fff1dd 100%);
+  box-shadow: 0 14px 22px -20px rgba(118, 69, 42, 0.56);
+}
+
+.paper-note::before,
+.paper-note::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  width: 48px;
+  height: 16px;
+  border-radius: 4px;
+  background: rgba(205, 157, 113, 0.45);
+  box-shadow: inset 0 0 0 1px rgba(123, 78, 50, 0.1);
+}
+
+.paper-note::before {
+  left: 12px;
+  transform: rotate(-10deg);
+}
+
+.paper-note::after {
+  right: 12px;
+  transform: rotate(9deg);
+}
+
+.washi-tape {
+  position: relative;
+}
+
+.washi-tape::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 14px;
+  width: 64px;
+  height: 18px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgba(211, 161, 126, 0.5), rgba(247, 219, 198, 0.55));
+  box-shadow: inset 0 0 0 1px rgba(154, 104, 75, 0.12);
+  transform: rotate(-7deg);
+  z-index: 10;
+}
+
+.polaroid {
+  border: 1px solid rgba(203, 158, 128, 0.24);
+  background: #fff;
+  padding: 0.45rem 0.45rem 0.9rem;
+  box-shadow:
+    0 8px 18px -16px rgba(108, 67, 44, 0.55),
+    0 1px 0 rgba(255, 255, 255, 0.8) inset;
+}
+
+.hero-glow {
+  position: absolute;
+  inset: 16% 18%;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(249, 228, 207, 0.68), rgba(248, 214, 214, 0.2) 52%, transparent 72%);
+  filter: blur(24px);
+  animation: shimmer 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.floral-corner {
+  position: absolute;
+  height: 84px;
+  width: 84px;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.floral-corner::before,
+.floral-corner::after {
+  content: "";
+  position: absolute;
+  border: 2px solid rgba(129, 84, 56, 0.45);
+  border-radius: 9999px;
+}
+
+.floral-corner::before {
+  inset: 10px 28px 30px 8px;
+  transform: rotate(-25deg);
+}
+
+.floral-corner::after {
+  inset: 28px 8px 10px 30px;
+  transform: rotate(20deg);
+}
+
+.floral-corner.top-left {
+  top: 10px;
+  left: 14px;
+}
+
+.floral-corner.bottom-right {
+  right: 14px;
+  bottom: 10px;
+  transform: rotate(180deg);
+}
